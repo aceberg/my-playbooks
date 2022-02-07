@@ -1,0 +1,20 @@
+# Ctrl+arrow to switch windows
+bind -n C-Left  previous-window
+bind -n C-Right next-window
+bind -n C-Down  new-window
+bind -n C-Up    copy-mode
+
+# List of plugins
+set -g @plugin 'jimeh/tmux-themepack'
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Set theme color
+set -goq @powerline-color-main-1 {{tm_color}}
+set -g @themepack 'powerline/block/gray'
+
+# Need this to install plugins from shell
+set-environment -g TMUX_PLUGIN_MANAGER_PATH '~/.tmux/plugins'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run -b '~/.tmux/plugins/tpm/tpm'

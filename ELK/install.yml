@@ -1,0 +1,74 @@
+---
+- name: Install and configure elasticsearch, logstash, kibana
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Add apt repo
+    apt_key:
+      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  - apt_repository:
+      repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+
+  - name: Install packages
+    package: name={{ item }} state=present update_cache=yes
+    with_items:
+    - default-jre
+    - elasticsearch
+    - logstash
+    - kibana
+    notify: Restart elasticsearch
+
+  - name: Copy logstash config file
+    template:
+      src: logstash.conf
+      dest: /etc/logstash/conf.d/
+    notify: Restart logstash
+
+  - name: Copy rsyslog config file 01-json-template.conf
+    template:
+      src: 01-json-template.conf
+      dest: /etc/rsyslog.d/
+    notify: Restart rsyslog
+
+  - name: Copy rsyslog config file 70-output.conf
+    template:
+      src: 70-output.conf
+      dest: /etc/rsyslog.d/
+    notify: Restart rsyslog
+
+  - name: Kibana listen on 0.0.0.0
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'server.host:'
+      line: 'server.host: 0.0.0.0'
+    notify: Restart kibana
+
+  - name: Usage
+    debug:
+      msg: "Please wait, kibana web interface will be at 0.0.0.0:5601"
+
+  handlers:
+  - name: Restart elasticsearch
+    service:
+      name: elasticsearch
+      state: restarted
+      enabled: yes
+
+  - name: Restart logstash
+    service:
+      name: logstash
+      state: restarted
+      enabled: yes
+
+  - name: Restart kibana
+    service:
+      name: kibana
+      state: restarted
+      enabled: yes
+
+  - name: Restart rsyslog
+    service:
+      name: rsyslog
+      state: restarted
+      enabled: yes

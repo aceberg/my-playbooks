@@ -1,0 +1,15 @@
+---
+- name: Reload WiFi
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Restart service hostapd
+    service:
+      name: hostapd
+      state: restarted
+
+  - name: Restart DHCP-server
+    service:
+      name: isc-dhcp-server
+      state: restarted

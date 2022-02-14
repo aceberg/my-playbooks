@@ -9,6 +9,7 @@ Short Ansible playbooks I created to automate my work
 | OpenProject | Install OpenProject | [openproject](openproject) |
 | Terraform | Install terraform and configure qemu/libvirt to work with it | [terraform.yml](terraform/terraform.yml)|
 | **User config** | 
+| Apt | Add additional PPA and apt repositories | [apt.yml](repo/apt.yml) |
 | Beep | Enable beep | [beep.yml](beep/beep.yml) |
 | Tmux | Install and configure tmux for user | [tmux](tmux) |
 | WiFi | Restart hostapd and DHCP-server | [wifi.yml](wifi/wifi.yml) |

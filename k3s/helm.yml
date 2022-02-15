@@ -1,0 +1,23 @@
+---
+- name: Install helm
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Repo key
+    apt_key:
+      url: https://baltocdn.com/helm/signing.asc
+      
+  - name: Add apt repo
+    apt_repository:
+      repo: deb https://baltocdn.com/helm/stable/debian/ all main
+
+  - name: Install package
+    apt:
+      name: helm
+      state: present
+      update_cache: yes
+
+  - name: Add bitbami repo
+    shell: "helm repo add bitnami https://charts.bitnami.com/bitnami"
+    become: no

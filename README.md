@@ -6,6 +6,7 @@ Short Ansible playbooks I created to automate my work
 | ------ | ------ | ------ | 
 | ELK | Basic installation of ElasticSearch, Logstash, Kibana | [ELK](ELK) |
 | Jenkins | Install Jenkins | [jenkins.yml](jenkins/jenkins.yml) |
+| K3s | Install K3s, Helm and Kuberneres Dashboard | [k3s.yml](k3s/k3s.yml) |
 | OpenProject | Install OpenProject | [openproject](openproject) |
 | Terraform | Install terraform and configure qemu/libvirt to work with it | [terraform.yml](terraform/terraform.yml)|
 | **User config** | 

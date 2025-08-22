@@ -1,0 +1,25 @@
+---
+- name: Install Docker container
+  hosts: all
+
+  vars:
+    d_name: BookTr
+    fw_ports:
+    - "{{ fw_ip }}:8856:8856"
+
+  tasks:
+  - name: Create "{{ d_name }}" container
+    docker_container:
+      name: "{{ d_name }}"
+      image: ghcr.io/aceberg/booktr
+      published_ports: "{{ fw_ports }}"
+      env:
+        TZ: "{{ my_tz }}"
+      volumes:
+      - "{{ data_path }}/{{ d_name }}:/data/{{ d_name }}"
+      restart_policy: unless-stopped
+      pull: yes
+      user: 1000:1000
+
+# URL:
+# https://github.com/aceberg/BookTr

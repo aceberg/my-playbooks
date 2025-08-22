@@ -1,0 +1,24 @@
+---
+- name: Add APT repository
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Download GPG key
+    get_url:
+      url: "https://packages.mozilla.org/apt/repo-signing-key.gpg"
+      dest: "/tmp/mozilla.key"
+
+  - name: Add key
+    shell: "gpg --dearmor < /tmp/mozilla.key > /etc/apt/trusted.gpg.d/mozilla.gpg"
+
+  - name: Add repo file
+    blockinfile:
+      path: "/etc/apt/sources.list.d/mozilla.list"
+      state: present
+      create: yes
+      owner: root
+      group: root
+      marker: "# {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        deb https://packages.mozilla.org/apt mozilla main

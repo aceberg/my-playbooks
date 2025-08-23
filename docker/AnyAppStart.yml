@@ -1,0 +1,27 @@
+---
+- name: Install Docker container
+  hosts: all
+
+  vars:
+    d_name: AnyAppStart
+    fw_ports:
+    - "{{ fw_ip }}:8855:8855"
+
+  tasks:
+  - name: Create "{{ d_name }}" container
+    docker_container:
+      name: "{{ d_name }}"
+      image: aceberg/anyappstart
+      published_ports: "{{ fw_ports }}"
+      env:
+        TZ: "{{ my_tz }}"
+      volumes:
+      - "{{ data_path }}/{{ d_name }}:/data/{{ d_name }}"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      restart_policy: unless-stopped
+      pull: yes
+
+# URL:
+# https://github.com/aceberg/AnyAppStart

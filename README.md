@@ -5,6 +5,7 @@ Short Ansible playbooks I created to automate my work
 | ------ | ------ | ------ | 
 | docker | Install apps in `Docker` containers | [docker](docker) |
 | repo | Add `apt` repos | [repo](repo) |
+| incus | Install Incus (fork of LXD) | [Incus](server/Incus) |
 
 
 ### Outdated playbooks moved to branch [old_2022](https://github.com/aceberg/my-playbooks/tree/old_2022):

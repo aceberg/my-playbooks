@@ -1,0 +1,37 @@
+---
+- name: Install incus
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Download GPG key
+    get_url:
+      url: "https://pkgs.zabbly.com/key.asc"
+      dest: "/tmp/incus.key"
+
+  - name: Add key
+    shell: "gpg --dearmor < /tmp/incus.key > /etc/apt/trusted.gpg.d/incus.gpg"
+
+  - name: Add repo file
+    blockinfile:
+      path: "/etc/apt/sources.list.d/zabbly-incus.list"
+      state: present
+      create: yes
+      owner: root
+      group: root
+      marker: "# {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        deb [arch=amd64] https://pkgs.zabbly.com/incus/stable trixie main
+
+  - name: Install packeges
+    package: 
+      name:
+        - incus
+        - incus-ui-canonical
+      state: present
+
+  - name: Add user to groups
+    user:
+      name: myuser
+      groups: incus-admin
+      append: yes

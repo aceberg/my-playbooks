@@ -1,0 +1,28 @@
+---
+- name: Install Docker container
+  hosts: all
+
+  vars:
+    d_name: wt
+
+  tasks:
+  - name: Create "{{ d_name }}" container
+    docker_container:
+      name: "{{ d_name }}"
+      image: nickfedor/watchtower
+      volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      restart_policy: unless-stopped
+      pull: yes
+      env:
+        WATCHTOWER_SCHEDULE: "0 21 13 * * *" # s m h d m w
+        WATCHTOWER_NOTIFICATIONS_HOSTNAME: "{{ ansible_hostname }}"
+        WATCHTOWER_NOTIFICATIONS_LEVEL: "info"
+        WATCHTOWER_WARN_ON_HEAD_FAILURE: "never"
+        WATCHTOWER_CLEANUP: "true"
+        WATCHTOWER_NOTIFICATION_URL: ""
+
+# URL:
+# https://github.com/nicholas-fedor/watchtower

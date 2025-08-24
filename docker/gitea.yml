@@ -1,0 +1,33 @@
+---
+- name: Install Docker container
+  hosts: all
+
+  vars:
+    d_name: gitea
+    port_ssh: "2222"
+    port_http: "8021"
+    fw_ports:
+    - "{{ fw_ip }}:{{ port_ssh }}:{{ port_ssh }}"
+    - "{{ fw_ip }}:{{ port_http }}:{{ port_http }}"
+
+  tasks:
+  - name: Create "{{ d_name }}" container
+    docker_container:
+      name: "{{ d_name }}"
+      image: gitea/gitea
+      published_ports: "{{ fw_ports }}"
+      volumes:
+      - "{{ data_path }}/{{ d_name }}:/data"
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      env:
+        SSH_PORT: "{{ port_ssh }}"
+        HTTP_PORT: "{{ port_http }}"
+        USER_UID: "1000"
+        USER_GID: "1000"
+      restart_policy: unless-stopped
+      pull: yes
+      memory_swap: 200M
+      memory: 200M
+
+# https://docs.gitea.com/installation/install-with-docker

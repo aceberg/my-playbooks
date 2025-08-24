@@ -1,0 +1,25 @@
+---
+- name: Install Docker container
+  hosts: all
+
+  vars:
+    d_name: wkd
+    fw_ports:
+    - "{{ fw_ip }}:8020:80"
+
+  tasks:
+  - name: Create "{{ d_name }}" container
+    docker_container:
+      name: "{{ d_name }}"
+      image: zavy86/wikidocs
+      published_ports: "{{ fw_ports }}"
+      env:
+        PUID: "1000"
+        PGID: "1000"
+      volumes:
+      - "{{ data_path }}/{{ d_name }}:/datasets"
+      restart_policy: unless-stopped
+      pull: yes
+
+# URL:
+# https://github.com/Zavy86/WikiDocs
